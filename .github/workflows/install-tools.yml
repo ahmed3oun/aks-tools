@@ -13,7 +13,7 @@ on:
       rg_name:
         description: "Put the name of the resource group to use"
         required: true
-        default: "azure-terraform"
+        default: "ahmedoun-rg-dev"
         type: string
       cluster_name:
         description: "Put the name of the AKS cluster to use"
@@ -44,19 +44,13 @@ jobs:
           terraform_version: 1.14.0
       - name: Init
         working-directory: ./
-        run: terraform init \
-          -backend-config="resource_group_name=${{ secrets.TF_BACKEND_RG }}" \
-          -backend-config="storage_account_name=${{ secrets.TF_BACKEND_STORAGE_ACCOUNT }}" \
-          -backend-config="container_name=${{ secrets.TF_BACKEND_CONTAINER }}" \
-          -backend-config="key=${{ secrets.TF_BACKEND_KEY }}"
+        run: terraform init -backend-config="resource_group_name=${{ secrets.TF_BACKEND_RG }}" -backend-config="storage_account_name=${{ secrets.TF_BACKEND_STORAGE_ACCOUNT }}" -backend-config="container_name=${{ secrets.TF_BACKEND_CONTAINER }}" -backend-config="key=${{ secrets.TF_BACKEND_KEY }}"
       - name: Terraform workspace select
         working-directory: ./
         run: terraform workspace select ${{ github.event.inputs.workspace }} || terraform workspace new ${{ github.event.inputs.workspace }}
       - name: Terraform Plan
         working-directory: ./
-        run: terraform plan \
-          -var="rg_name=${{ github.event.inputs.rg_name }}" \
-          -var="cluster_name=${{ github.event.inputs.cluster_name }}"
+        run: terraform plan -var="rg_name=${{ github.event.inputs.rg_name }}" -var="cluster_name=${{ github.event.inputs.cluster_name }}"
         env:
           ARM_USE_OIDC: true
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -64,10 +58,7 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: Terraform Apply
         working-directory: ./
-        run: terraform apply \
-          -var="rg_name=${{ github.event.inputs.rg_name }}" \
-          -var="cluster_name=${{ github.event.inputs.cluster_name }}" \
-          -auto-approve
+        run: terraform apply -var="rg_name=${{ github.event.inputs.rg_name }}" -var="cluster_name=${{ github.event.inputs.cluster_name }}" -auto-approve
         env:
           ARM_USE_OIDC: true
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
