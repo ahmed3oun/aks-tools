@@ -1,0 +1,27 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer # This resource defines a ClusterIssuer for cert-manager, 
+# which is responsible for obtaining TLS certificates from Let's Encrypt. 
+# The ClusterIssuer is configured to use the ACME protocol with the HTTP-01 challenge type, 
+# allowing it to automatically request and renew certificates for the specified domains.
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: ahmedoun199@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-prod-account-key
+    solvers:
+    - http01:
+        gatewayHTTPRoute:
+          parentRefs:
+          - group: gateway.networking.k8s.io
+            kind: Gateway
+            name: public-gateway
+            namespace: envoy-gateway-system
+
+# explain this file in detail
+# This file defines a ClusterIssuer resource for cert-manager,
+# which is responsible for obtaining TLS certificates from Let's Encrypt.
+# The ClusterIssuer is configured to use the ACME protocol with the HTTP-01 challenge type,
+# allowing it to automatically request and renew certificates for the specified domains.

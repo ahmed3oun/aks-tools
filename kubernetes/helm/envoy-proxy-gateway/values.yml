@@ -1,0 +1,42 @@
+proxy:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  service:
+    type: LoadBalancer # Use LoadBalancer for AKS to get an external IP
+    externalTrafficPolicy: Cluster # Preserve client IPs for better logging and security
+hpa:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 2
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+
+gatewayClass:
+  create: true
+  name: gc-gateway-class
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+
+# explain this file in detail
+# This file defines the configuration values for the Envoy Proxy Gateway Helm chart.
+# It includes settings for the proxy deployment, such as resource requests and limits,
+# service type and external traffic policy, horizontal pod autoscaling (HPA) parameters,
+# and GatewayClass configuration.
+# The HPA is configured to scale the number of replicas based on CPU utilization,
+# ensuring that the gateway can handle varying levels of traffic while maintaining performance
+# and reliability. The service type is set to LoadBalancer, which allows the gateway to be exposed
+# externally, and the external traffic policy is set to Cluster to preserve
+# client IPs for better logging and security.
+# The GatewayClass configuration specifies that a GatewayClass resource should be
+# created with the given name and controller name, which is necessary for the Envoy
+# Proxy Gateway to function properly within the Kubernetes Gateway API framework.

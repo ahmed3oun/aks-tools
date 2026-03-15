@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: app-cert
+  namespace: envoy-gateway-system
+spec:
+  secretName: app-tls
+  dnsNames:
+  - ahmedoun.aks.karimarous.com
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-prod
+
+
+# explain this file in details

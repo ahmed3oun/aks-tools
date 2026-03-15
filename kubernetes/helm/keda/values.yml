@@ -1,0 +1,35 @@
+# KEDA Helm Chart Values
+
+# Enable metrics server
+metricsServer:
+  enabled: true
+
+# Enable Prometheus metrics adapter
+prometheus:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+
+# Configure the operator
+operator:
+  logLevel: debug
+  replicas: 2
+
+# Authentication for scalers
+auth:
+  podIdentity:
+    enabled: false
+  serviceAccount:
+    create: true
+    name: "keda-operator"
+
+# explain this file in detail
+# This file defines the configuration values for the KEDA Helm chart,
+# which is used to deploy KEDA (Kubernetes Event-Driven Autoscaling) in a Kubernetes cluster.
+# The configuration includes settings for enabling the metrics server and Prometheus metrics adapter,
+# as well as operator configurations such as log level and replica count.
+# Additionally, it includes authentication settings for scalers, allowing users to choose between
+# pod identity and service account authentication methods.
+# The service account configuration allows for the creation of a service account with a specified name,
+# which can be used by KEDA to authenticate with the Kubernetes API server when managing scaling operations.
+

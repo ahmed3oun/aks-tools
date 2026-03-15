@@ -1,0 +1,41 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy # This is the custom resource definition for the Envoy Proxy Gateway,
+# which defines the desired state of the gateway deployment in Kubernetes.
+# It includes specifications for logging, provider configuration, and resource management to ensure
+# optimal performance and scalability.
+metadata:
+  name: ep-envoy-proxy
+  namespace: envoy-gateway-system
+spec:
+  logging:
+    level:
+      default: warn
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyHpa:
+        maxReplicas: 5
+        metrics:
+          - resource:
+              name: cpu
+              target:
+                averageUtilization: 60
+                type: Utilization
+            type: Resource
+        minReplicas: 2
+      envoyService:
+        type: LoadBalancer
+        externalTrafficPolicy: Cluster
+      envoyDeployment:
+        replicas: 2
+
+# explain this file in detail
+# This file defines an EnvoyProxy resource for the Envoy Proxy Gateway,
+# which is a Kubernetes custom resource that specifies the desired state of the gateway deployment.
+# The configuration includes logging settings, provider specifications for Kubernetes,
+# and resource management parameters such as horizontal pod autoscaling (HPA) for the Envoy deployment.
+# The HPA is configured to scale the number of replicas based on CPU utilization,
+# ensuring that the gateway can handle varying levels of traffic while maintaining performance
+# and reliability. The service type is set to LoadBalancer, which allows the gateway to be exposed
+# externally, and the external traffic policy is set to Cluster to preserve client IPs for better
+# logging and security.

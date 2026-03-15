@@ -1,0 +1,52 @@
+provider:
+  name: azure
+
+policy: upsert-only
+registry: txt
+txtOwnerId: aks-envoy
+sources:
+  - gateway-httproute
+
+domainFilters:
+  - aks.karimarous.com
+interval: 1m
+
+serviceAccount:
+  labels:
+    azure.workload.identity/use: "true"
+  annotations:
+    azure.workload.identity/client-id: "REPLACE_UAMI_CLIENT_ID"
+
+podLabels:
+  azure.workload.identity/use: "true"
+
+extraVolumes:
+  - name: azure-config-file
+    secret:
+      secretName: external-dns-azure
+
+extraVolumeMounts:
+  - name: azure-config-file
+    mountPath: /etc/kubernetes
+    readOnly: true
+
+# explain this file in detail:
+# This is a Helm values file for configuring the External DNS application in a Kubernetes cluster.
+# The file specifies various settings for the External DNS application, including the provider, policy, registry,
+# sources, domain filters, interval, service account, pod labels, and extra volumes and volume mounts.
+# The provider is set to "azure", indicating that External DNS will manage DNS records in Azure.
+# The policy is set to "upsert-only", which means that External DNS will only create or update DNS records,
+# but will not delete them. The registry is set to "txt", which means that External DNS will use TXT records
+# to store ownership information for the DNS records it manages. The txtOwnerId is set to "aks-envoy",
+# which is a unique identifier for the owner of the DNS records.
+# The sources section specifies that External DNS will manage DNS records for HTTPRoute resources in the
+# Kubernetes cluster. The domainFilters section specifies that External DNS will only manage DNS records for
+# the domain "aks.karimarous.com". The interval is set to "1m", which means that External DNS will check for
+# changes in the Kubernetes resources every minute.
+# The serviceAccount section specifies that the External DNS application will use a service account with
+# specific labels and annotations for Azure Workload Identity. The podLabels section specifies that the
+# pods running the External DNS application will also have a label for Azure Workload Identity.
+# The extraVolumes and extraVolumeMounts sections specify that a secret named "external-dns-azure"
+# will be mounted as a volume in the External DNS pods, allowing the application to access the necessary
+# credentials for managing DNS records in Azure. The secret is expected to contain the Azure configuration
+# needed for authentication and authorization when interacting with Azure DNS services.

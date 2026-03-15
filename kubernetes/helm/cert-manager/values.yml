@@ -1,0 +1,15 @@
+crds:
+  enabled: true
+config:
+  apiVersion: controller.config.cert-manager.io/v1alpha1
+  kind: ControllerConfiguration # This is the custom resource definition for the cert-manager 
+  # controller configuration, which defines the desired state of the cert-manager deployment in Kubernetes.
+  enableGatewayAPI: true
+
+
+# explain this file in detail
+# This file defines the configuration for cert-manager, a Kubernetes add-on that automates the management
+# and issuance of TLS certificates. The configuration includes enabling the Gateway API,
+# which allows cert-manager to integrate with Kubernetes Gateway resources for certificate management.
+# The file also specifies that Custom Resource Definitions (CRDs) should be enabled,
+# allowing cert-manager to create and manage its own custom resources in the cluster.
