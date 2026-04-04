@@ -4,4 +4,3 @@ resource "kubectl_manifest" "certificate_app" {
 }
 
 # explain this file
-

@@ -11,7 +11,7 @@ resource "helm_release" "keda" {
   repository = "https://kedacore.github.io/charts"
   version    = "2.19.0" # Specify the desired version
 
-  values     = [file("${path.module}/kubernetes/helm/keda/values.yaml")]
+  values     = [file("${path.module}/kubernetes/helm/keda/values.yml")]
   depends_on = [kubernetes_namespace.keda]
 }
 

@@ -10,12 +10,12 @@ resource "helm_release" "cert_manager" {
   chart      = "cert-manager"
   repository = "https://charts.jetstack.io"
   version    = "v1.19.0" # Specify the desired version
-  values     = [file("${path.root}/kubernetes/helm/cert-manager/values.yaml")]
+  values     = [file("${path.root}/kubernetes/helm/cert-manager/values.yml")]
   depends_on = [kubernetes_namespace.cert_manager]
 }
 
 resource "kubectl_manifest" "cluster_issuer" {
-  yaml_body  = file("${path.root}/kubernetes/helm/cert-manager/manifests/cluster-issuer.yaml")
+  yaml_body  = file("${path.root}/kubernetes/helm/cert-manager/manifests/cluster-issuer.yml")
   depends_on = [helm_release.cert_manager]
 }
 

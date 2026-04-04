@@ -10,12 +10,12 @@ resource "helm_release" "envoy_proxy_gateway" {
   chart     = "oci://docker.io/envoyproxy/gateway-helm"
   version   = "1.7.0"
 
-  values     = [file("${path.module}/kubernetes/helm/envoy-proxy-gateway/values.yaml")]
+  values     = [file("${path.module}/kubernetes/helm/envoy-proxy-gateway/values.yml")]
   depends_on = [kubernetes_namespace.envoy_gateway_system]
 }
 
 resource "kubectl_manifest" "envoy_proxy" {
-  yaml_body  = file("${path.root}/kubernetes/helm/envoy-proxy-gateway/manifests/envoyproxy.yaml")
+  yaml_body  = file("${path.root}/kubernetes/helm/envoy-proxy-gateway/manifests/envoyproxy.yml")
   depends_on = [helm_release.envoy_proxy_gateway]
 }
 
